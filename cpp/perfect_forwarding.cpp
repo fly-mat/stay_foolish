@@ -1,8 +1,9 @@
 /**
- * this file explains the concept of perfect forwarding in c++ 11
- * with easy-to-understand sample codes
+ * Perfect Forwarding
  * 
- * perfect forwarding is especially useful when constructing some expensive objects
+ * was introduced in c++ 11
+ * this file demonstrates how perfect forwarding works
+ * with clear sample codes
  */
 
 #include <iostream>
@@ -10,6 +11,10 @@
 
 #define log(m) (std::cout << m << std::endl)
 
+/**
+ * an expensive-to-construct class,
+ * with three types of constructors implemented
+ */
 struct Expensive {
     Expensive(int _ii, std::vector<int> _vv) :
         ii(_ii),
@@ -31,6 +36,9 @@ struct Expensive {
     std::vector<int> vv;
 };
 
+
+////////////////////////////////////////////////////////////////////////////////
+//// Possible Implementations of Wrapper ///////////////////////////////////////
 /**
  * default way of construction
  */
@@ -57,8 +65,9 @@ struct Wrapper_CopyConstruct {
 
 /**
  * move construct
- * but forget to call std::move()
- * making it works the same as the copy construct version
+ * 
+ * but forget to call std::move() in its move constructor
+ * making it works the same as the `Wrapper_CopyConstruct`
  */
 struct Wrapper_MoveConstruct_Wrong {
     Wrapper_MoveConstruct_Wrong(int _i, Expensive&& _e) :
@@ -83,7 +92,7 @@ struct Wrapper_MoveConstruct_Correct {
 
 /**
  * perfect forwarding
- * where T&& is known as the forwarding reference
+ * where T&& is known as the "forwarding reference"
  * 
  * constructor call changes according to the argument type
  */
@@ -98,7 +107,7 @@ struct Wrapper_PerfectForwarding {
 };
 
 /**
- * construct in a vector::emplace_back() fashion
+ * construct member variables in a vector::emplace_back() fashion
  * with the variadic template
  * 
  * probably not very useful though...
